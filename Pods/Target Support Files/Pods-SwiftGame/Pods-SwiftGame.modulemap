@@ -1,0 +1,6 @@
+framework module Pods_SwiftGame {
+  umbrella header "Pods-SwiftGame-umbrella.h"
+
+  export *
+  module * { export * }
+}
