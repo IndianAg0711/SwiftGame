@@ -14,6 +14,9 @@
 		D39B73DA1DB1628900FD82D1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D39B73D81DB1628900FD82D1 /* Main.storyboard */; };
 		D39B73DC1DB1628A00FD82D1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D39B73DB1DB1628A00FD82D1 /* Assets.xcassets */; };
 		D39B73DF1DB1628A00FD82D1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D39B73DD1DB1628A00FD82D1 /* LaunchScreen.storyboard */; };
+		D39B73EB1DB164BE00FD82D1 /* background-music-aac.caf in Resources */ = {isa = PBXBuildFile; fileRef = D39B73E81DB164BE00FD82D1 /* background-music-aac.caf */; };
+		D39B73ED1DB164BE00FD82D1 /* sprites.atlas in Resources */ = {isa = PBXBuildFile; fileRef = D39B73EA1DB164BE00FD82D1 /* sprites.atlas */; };
+		D39B73EF1DB16F8500FD82D1 /* pew-pew-lei.caf in Resources */ = {isa = PBXBuildFile; fileRef = D39B73EE1DB16F8000FD82D1 /* pew-pew-lei.caf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +29,9 @@
 		D39B73DB1DB1628A00FD82D1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D39B73DE1DB1628A00FD82D1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D39B73E01DB1628A00FD82D1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D39B73E81DB164BE00FD82D1 /* background-music-aac.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "background-music-aac.caf"; sourceTree = "<group>"; };
+		D39B73EA1DB164BE00FD82D1 /* sprites.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = sprites.atlas; sourceTree = "<group>"; };
+		D39B73EE1DB16F8000FD82D1 /* pew-pew-lei.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "pew-pew-lei.caf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,10 +70,29 @@
 				D39B73D61DB1628900FD82D1 /* GameViewController.swift */,
 				D39B73D81DB1628900FD82D1 /* Main.storyboard */,
 				D39B73DB1DB1628A00FD82D1 /* Assets.xcassets */,
+				D39B73EE1DB16F8000FD82D1 /* pew-pew-lei.caf */,
 				D39B73DD1DB1628A00FD82D1 /* LaunchScreen.storyboard */,
 				D39B73E01DB1628A00FD82D1 /* Info.plist */,
+				D39B73E61DB164BE00FD82D1 /* SpriteKitSimpleGameResources */,
 			);
 			path = SwiftGame;
+			sourceTree = "<group>";
+		};
+		D39B73E61DB164BE00FD82D1 /* SpriteKitSimpleGameResources */ = {
+			isa = PBXGroup;
+			children = (
+				D39B73E71DB164BE00FD82D1 /* Sounds */,
+				D39B73EA1DB164BE00FD82D1 /* sprites.atlas */,
+			);
+			path = SpriteKitSimpleGameResources;
+			sourceTree = "<group>";
+		};
+		D39B73E71DB164BE00FD82D1 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				D39B73E81DB164BE00FD82D1 /* background-music-aac.caf */,
+			);
+			path = Sounds;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -128,6 +153,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D39B73EF1DB16F8500FD82D1 /* pew-pew-lei.caf in Resources */,
+				D39B73ED1DB164BE00FD82D1 /* sprites.atlas in Resources */,
+				D39B73EB1DB164BE00FD82D1 /* background-music-aac.caf in Resources */,
 				D39B73D31DB1628900FD82D1 /* GameScene.sks in Resources */,
 				D39B73DF1DB1628A00FD82D1 /* LaunchScreen.storyboard in Resources */,
 				D39B73DC1DB1628A00FD82D1 /* Assets.xcassets in Resources */,
