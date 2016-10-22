@@ -2,6 +2,8 @@
 Multiplayer Game built in Swift to leverage Phoenix backend.
 
 # Install
-1: Clone the Repo
+Clone the Repo
 
-2: Open project file in Xcode and Run simulator
+Run `pod install` (Download Cocoapods if you don't have it: [Cocoapods](http://cocoapods.org))
+
+Open xcworkspace in Xcode and Run simulator
