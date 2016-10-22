@@ -9,6 +9,8 @@
 import SpriteKit
 
 class GameScene: SKScene {
+  var gameSceneDelegate: GameSceneDelegate?
+
   let player = SKSpriteNode(imageNamed: "player")
 
   override func didMoveToView(view: SKView) {
@@ -22,11 +24,15 @@ class GameScene: SKScene {
 
   override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
     for touch in touches {
-      print(touch)
-
       let point = touch.locationInNode(self)
 
       player.runAction(SKAction.moveTo(point, duration: 1.0))
+
+      gameSceneDelegate?.playerMoved()
     }
   }
+}
+
+protocol GameSceneDelegate {
+  func playerMoved()
 }
