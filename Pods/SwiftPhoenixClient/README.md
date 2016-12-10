@@ -1,15 +1,27 @@
-Swift Phoenix Client
-====================
+# Swift Phoenix Client
 
-While I stil check up on this project and its issues (and enjoy doing so), our family's new son leaves me with significantly less free time for maintenance than I would like. I would love to hear from one or a few people who are passionate and up-to-date on all things Swift if they have any interest in helping maintain this project. Thanks for any interest :) 
+[![Version](https://img.shields.io/cocoapods/v/SwiftPhoenixClient.svg?style=flat)](http://cocoapods.org/pods/SwiftPhoenixClient)
+[![License](https://img.shields.io/cocoapods/l/SwiftPhoenixClient.svg?style=flat)](http://cocoapods.org/pods/SwiftPhoenixClient)
+[![Platform](https://img.shields.io/cocoapods/p/SwiftPhoenixClient.svg?style=flat)](http://cocoapods.org/pods/SwiftPhoenixClient)
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+
+## About
+Swift Phoenix Client is an extension of Starscream websocket client library
+that makes it easy to connect to Phoenix sockets in a similar manner to the
+Phoenix Socket Javascript library.
 
 ## Installation
 
 ### CocoaPods
 
-You can install SwiftPhoenix Client via CocoaPods by adding the following to your Podfile
+You can install SwiftPhoenix Client via CocoaPods by adding the following to your
+Podfile. Keep in mind that in order to use Swift Phoenix Client, the minimum iOS
+target must be '9.0'
 
 ```
+platform :ios, '9.0'
+use_frameworks!
+
 pod "SwiftPhoenixClient"
 ```
 
@@ -21,63 +33,115 @@ Using the Swift Phoenix Client is extremely easy (and familiar if have used the 
 
 ### Socket Connection/Setup
 
-The first thing you will need is to specify your Phoenix channel endpoint:
+The first thing you will need is to specify your Phoenix channel endpoint.
+To do so, you must separate a url into its domainAndPort, path, transport, and
+protocol. For example:
 
 ```
-let socket = Phoenix.Socket(domainAndPort: "localhost:4000", path: "socket", transport: "websocket")
-```
-
-To specify a specific protocol you can use the `prot` argument:
-
-```
-let socket = Phoenix.Socket(domainAndPort: "localhost:4000", path: "socket", transport: "websocket", prot: "https")
-```
-
-Additionally, you will want to identify the topic of the channel we are joining:
+http://localhost:4000/socket
+domainAndPort: loocalhost:4000
+path: socket
+transport: websocket
+protocol: http
 
 ```
-let topic: String? = "rooms:lobby"
+So, to create this socket, you'd write:
+
+```
+let socket = Socket(domainAndPort: "localhost:4000", path: "socket", transport: "websocket")
+```
+
+A couple of things to note: first, the default protocol is http, so you can omit
+it in the creation of the websocket. Second, the 'traditional' transport is websocket.
+
+Another example:
+
+```
+ws://myphoenixserver.com/socket
+domainAndPort: myphoenixserver.com
+path: socket
+transport: websocket
+protocol: ws
+```
+
+So, the socket would be created with:
+
+```
+let socket = Socket(domainAndPort: "myphoenixserver.com", path: "socket", transport: "websocket")
 ```
 
 ### Joining Channel
 
-Next we want to join our channel:
+In order to join a channel you must call the function `socket.join`, which takes
+four arguments:
+
+* Topic: The topic to join, for instance `"rooms:lobby"`
+* Message: A Message object that is sent to the server when the socket joins the channel.
+* Callback: A closure that receives a AnyObject and returns void. This AnyObject can be cast to
+a Channel object to add callbacks.
+
+For example, let's say we're joining the channel `"rooms:lobby"`, we want to
+send a message indicating that we're joining and we don't want to do anything
+with the channel we're joining (we'll get into details about sending and
+retrieving data from a channel in the next section). You'd do something as follows.
+
 
 ```
-socket.join(topic: topic!, message: Phoenix.Message(subject: "status", body: "joining")) { channel in
-  let chan = channel as! Phoenix.Channel
+socket.join(topic: "rooms:lobby", message: Message(subject: "status", body: "joining")) { channel in
+  let channel = channel as! Channel
+}
+```
 
-  chan.on("join") { message in
-    // A new player has joined the game
+### Channel callbacks
+
+The Channel has one main method to specify callbacks: `on`, which takes two parameters:
+
+* Event: A String object indicating what kind of event you're listening for.
+* Callback: A closure that receives AnyObject and returns void. This AnyObject can be
+cast to Message to retrieve data from the message.
+
+Some examples:
+
+```
+  channel.on("join") { message in
+    debugPrint("You joined the room")
   }
-}
-```
-
-### New Messages
-
-We will want to handle new messages (or events) on the channel:
-
-```
-chan.on("new:msg") { message in
-  let msg = message as! Phoenix.Message
-  // Fire ze missiles.
-}
-```
-
-### Other Events
-
-Just like above,  you can handle any events that your Phoenix app is handling/broadcasting.
-
-```
-chan.on("user:entered") { message in
-  // A new user has entered the game.
-}
 ```
 
 ```
-chan.on("error") { message in
-  // Nuts
-}
+  channel.on("error") { message in
+    let message = message as! Message
+
+    // data is a dictionary with keys that indicate the name of the field
+    // and a value of type AnyObject
+    let data = message.message as! Dictionary<String, SwiftPhoenixClient.JSON>
+
+    // Let's say that our data has a "error_type" key
+    let errorType = (data["error_type"].asString)!
+
+    debugPrint(errorType)
+  }
+```
+
+### Sending data to channel
+
+In contrast to Phoenix.Socket javascript library, in Swift Phoenix Client you
+don't use a channel object to send data to a channel, you send the data through
+a Socket object directly using the `send` method, which receives one
+parameter:
+
+* data: A Payload object with the data to send.
+
+For example:
+
+```
+  let message = Message(message: ["user": "Muhammad Ali", "body": "I am gonna show you how great I am"]
+  )
+  let topic = "rooms:lobby"
+  let event = "new:message"
+  let payload = Payload(topic: topic, event: event, message: message)
+  socket.send(payload)
+
 ```
 
 ## Example
@@ -86,13 +150,15 @@ Check out the [ViewController](https://github.com/davidstump/SwiftPhoenixClient/
 
 Also check out both the Swift and Elixir channels on IRC.
 
-Read the `README_pods.md` file to include this pod from a local copy (of a cloned repo). This may be necessary if you want to use the latest features, but they haven't been tagged and released to CocoaPods yet.
-
 ## Note:
 
-Currently works with Swift 2.0, Xcode 7.0, and Phoenix 1.0.1.
+Currently works with Swift 3.0, Xcode 8.0, and Phoenix 1.2.
 
-Tested with the [Phoenix Chat Server example](https://github.com/chrismccord/phoenix_chat_example), upgraded to Phoenix 1.0.1.
+Tested with the [Phoenix Chat Server example](https://github.com/chrismccord/phoenix_chat_example), upgraded to Phoenix 1.2.
+
+## Development
+
+To set up your environment to work on `SwiftPhoenixClient` itself, clone the repo and then run `$ git submodule update --init` to check out the appropriate version of `Starscream`. You can then open `SwiftPhoenixClient.xcworkspace` in Xcode.
 
 ## License
 

@@ -13,20 +13,20 @@ class GameScene: SKScene {
 
   let player = SKSpriteNode(imageNamed: "player")
 
-  override func didMoveToView(view: SKView) {
+  override func didMove(to view: SKView) {
     // 2
-    backgroundColor = SKColor.whiteColor()
+    backgroundColor = SKColor.white
     // 3
     player.position = CGPoint(x: size.width * 0.5, y: size.height * 0.5)
     // 4
     addChild(player)
   }
 
-  override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     for touch in touches {
-      let point = touch.locationInNode(self)
+      let point = touch.location(in: self)
 
-      player.runAction(SKAction.moveTo(point, duration: 1.0))
+      player.run(SKAction.move(to: point, duration: 1.0))
 
       gameSceneDelegate?.playerMoved()
     }

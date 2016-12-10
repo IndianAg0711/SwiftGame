@@ -12,8 +12,8 @@ import SwiftPhoenixClient
 
 class GameViewController: UIViewController {
 
-  private let socket = Phoenix.Socket(domainAndPort: "localhost:4000", path: "socket", transport: "websocket")
-  private var topic = "rooms:lobby"
+  fileprivate let socket = Socket(domainAndPort: "localhost:4000", path: "socket", transport: "websocket")
+  fileprivate var topic = "rooms:lobby"
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -24,19 +24,19 @@ class GameViewController: UIViewController {
     skView.showsFPS = true
     skView.showsNodeCount = true
     skView.ignoresSiblingOrder = true
-    scene.scaleMode = .ResizeFill
+    scene.scaleMode = .resizeFill
     skView.presentScene(scene)
 
-    socket.join(topic: topic, message: Phoenix.Message(subject: "status", body: "joining")) { channel in
-      let channel = channel as? Phoenix.Channel
+    socket.join(topic: topic, message: Message(subject: "status", body: "joining")) { channel in
+      let channel = channel as? Channel
 
-      channel?.on("join") { message in
+      channel?.on(event: "join") { message in
         print(message)
       }
     }
   }
 
-  override func prefersStatusBarHidden() -> Bool {
+  override var prefersStatusBarHidden : Bool {
     return true
   }
 }
